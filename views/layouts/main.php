@@ -52,6 +52,8 @@ AppAsset::register($this);
                 ['label' => 'รายงานคอมพิวเตอร์', 'url' => ['/reportcomtype']],
                 ['label' => 'รายงานปัญหาคอมพิวเตอร์', 'url' => ['/reportcomservice']],
                 ['label' => 'กราฟสรุปจำนวนคอมพิวเตอร์', 'url' => ['/chartcom']],
+                ['label' => 'รายงาน PDF', 'url' => ['/pdftest']],
+                
             ];
 
 
@@ -63,14 +65,15 @@ AppAsset::register($this);
                     ['label' => 'ลงทะเบียน', 'items' => $regist],
                     ['label' => 'ระบบรายงาน', 'items' => $report],
                     ['label' => 'ทดสอบ1', 'url' => ['/first1/index']],
-                    ['label' => 'ตั้งค่าระบบ', 'items' => $setting],
-                    Yii::$app->user->isGuest ? (
+                    ['label' => 'ตั้งค่าระบบ', 'items' => $setting,'visible'=>Yii::$app->session->has('username')],
+                    ['label' => 'ลงทะเบียน', 'items' => $regist],
+                    !Yii::$app->session->get('username') ? (
                             ['label' => 'Login', 'url' => ['/site/login']]
                             ) : (
                             '<li>'
                             . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
                             . Html::submitButton(
-                                    'Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link']
+                                    'Logout (' . Yii::$app->session->get('username') . ')', ['class' => 'btn btn-link']
                             )
                             . Html::endForm()
                             . '</li>'

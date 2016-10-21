@@ -57,13 +57,21 @@ class LoginForm extends Model
      * Logs in a user using the provided username and password.
      * @return boolean whether the user is logged in successfully
      */
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
-        }
-        return false;
-    }
+    public function login() {
+        
+       $user_login = User::find()
+           ->where('loginname=:username', [':username' => $this->username])
+           ->andWhere('password = :password', [':password' => md5($this->password)])
+           ->one();
+       if ($user_login) {
+           Yii::$app->session->set('userfullname', $user_login->name);
+           Yii::$app->session->set('username', $user_login->loginname);
+           Yii::$app->session->set('userid', $user_login->user_id);
+           return true;
+       } else {
+           return false;
+         }
+     }
 
     /**
      * Finds user by [[username]]
@@ -77,5 +85,11 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+    public function attributeLabels() {
+        return [
+            'username' => 'รหัสผู้ใช้',
+            'password' => 'รหัสผ่าน',
+        ];
     }
 }

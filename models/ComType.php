@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "com_type".
@@ -39,5 +40,8 @@ class ComType extends \yii\db\ActiveRecord
             'com_type_id' => 'Com Type ID',
             'com_type_name' => 'Com Type Name',
         ];
+    }
+    public static function GetList() {
+        return ArrayHelper::map(self::find()->all(), 'com_type_id', 'com_type_name');
     }
 }
